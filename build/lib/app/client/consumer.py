@@ -1,0 +1,65 @@
+
+
+
+import asyncio
+
+from azure.eventhub.aio import EventHubConsumerClient
+from azure.identity.aio import DefaultAzureCredential
+
+from app.utils.events import on_event
+
+
+class EventHubConsumer:
+    """
+    This class is used to for every messages consume purpose within the Azure Event Hub. To make 
+    it work, you need to provide the following information:
+    - connection_specs: The connection string to the Event Hub instance
+    - eventhub_id: The name of the Event Hub instance
+    - eventhub_namespace: The name of the Event Hub namespace
+
+    On this class you can find the following methods:
+    - consume: This method is used to consume events from the Event Hub instance. 
+
+    TO BE UPDATED:
+    """
+
+    def __init__(self, connection_specs: str, eventhub_id: str, eventhub_namespace: str):
+
+        self.eventhub_name = eventhub_id
+        self.eventhub_namespace = eventhub_namespace
+        self.connection_features = connection_specs
+
+        self.credential = DefaultAzureCredential()
+
+
+    def create_consumer(self):
+        """
+        This method is used to create a consumer client for the Event Hub instance.
+
+        :return: a consumer client for the Event Hub instance
+        """
+
+        client = EventHubConsumerClient.from_connection_string(
+            conn_str = self.connection_features,
+            consumer_group = '$Default',
+            eventhub_name = self.eventhub_name
+        )
+
+        return client
+    
+
+    async def get_messages(self):
+        """
+        This method is used to consume events from the Event Hub instance.
+        
+        :return: a list of messages
+        """
+
+        client = self.create_consumer()
+
+        async with client:
+            # Start receiving messages from the beginning of the partition.
+            await client.receive(on_event=on_event, starting_position="-1")
+
+        # Close credential when no longer needed.
+        await self.credential.close()
