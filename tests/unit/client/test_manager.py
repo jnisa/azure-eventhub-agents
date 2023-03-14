@@ -20,6 +20,13 @@ class EventHubManagerTests(TestCase):
         self.assertEqual("eventhub_namespace", result.eventhub_namespace)
 
 
+    # TODO. all the tests that we should cover to the list eventhubs method
+    # 1. test that the function doesn't raise any errors when a valid connection string
+    # 2. test that the function raise an Exception when a invalid connection string is provided.
+    # 3. test that the function doesn't raise an Exception when the EventHub doesn't have any instances.
+    # 4. make sure that the function returns an empty list when invalid subcription is provided.
+    
+
     def test_list_eventhubs_tc1(self):
         """
         list_eventhubs - 1st Test Case Scenario
@@ -40,6 +47,12 @@ class EventHubManagerTests(TestCase):
 
             self.assertEqual(result, expected)
 
+
+    # TODO. all the tests that we should cover to the list consumer groups method
+    # 1. test that the function doesn't raise any errors when a valid connection string
+    # 2. test that the function raise an Exception when a invalid connection string is provided.
+    # 3. test that the function doesn't raise an Exception when the EventHub doesn't have any instances.
+    # 4. make sure that the function returns an empty list when invalid subcription is provided.
 
     def test_list_consumer_groups_tc1(self):
         """

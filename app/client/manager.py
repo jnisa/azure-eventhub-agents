@@ -6,6 +6,9 @@ from azure.identity import DefaultAzureCredential
 from azure.mgmt.eventhub import EventHubManagementClient
 
 
+# TODO. create a Namespace Manager here
+
+
 class EventHubManager(ABC):
     """
     This class is used to manage all the Event Hub related resources. To make it work, you need to
@@ -30,7 +33,7 @@ class EventHubManager(ABC):
 
 
     @staticmethod
-    def list_eventhubs(self) -> list:
+    def list_eventhubs(self) -> list[str]:
         """
         This method is used to list all the Event Hub instances within the Event Hub namespace provided.
         """
@@ -39,10 +42,10 @@ class EventHubManager(ABC):
 
 
     @staticmethod
-    def list_consumer_groups(self) -> list:
+    def list_consumer_groups(self) -> list[str]:
         """
         This method is used to list all the consumer groups within the Event Hub namespace provided.
         """
 
-        return [consumer_group.name for consumer_group in self.management_client.list_consumer_groups(self.eventhub_namespace)]
+        return [cg.name for cg in self.management_client.list_consumer_groups(self.eventhub_namespace)]
     

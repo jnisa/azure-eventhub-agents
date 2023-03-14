@@ -14,6 +14,7 @@ class EventHubConsumer:
     - connection_specs: The connection string to the Event Hub instance
     - eventhub_id: The name of the Event Hub instance
     - eventhub_namespace: The name of the Event Hub namespace
+    - starting_position: the position from which the consumer will start reading the messages
 
     On this class you can find the following methods:
     - create_consumer: This method is used to create a consumer client for the Event Hub instance.
@@ -35,11 +36,12 @@ class EventHubConsumer:
     # TODO. raise an exception if the connection_specs is not a string
     # TODO. raise an exception if the connection_specs is not a valid one
 
-    def __init__(self, connection_specs: str, eventhub_id: str, eventhub_namespace: str):
+    def __init__(self, connection_specs: str, eventhub_id: str, eventhub_namespace: str, starting_position: str = "-1"):
 
         self.eventhub_name = eventhub_id
         self.eventhub_namespace = eventhub_namespace
         self.connection_features = connection_specs
+        self.reading_position = starting_position
 
         self.credential = DefaultAzureCredential()
 
@@ -60,14 +62,12 @@ class EventHubConsumer:
         :return: a consumer client for the Event Hub instance
         """
 
-        client = EventHubConsumerClient.from_connection_string(
+        return EventHubConsumerClient.from_connection_string(
             conn_str = self.connection_features,
             consumer_group = consumer_group,
             eventhub_name = self.eventhub_name
         )
 
-        return client
-    
 
     async def get_messages(self):
         """
@@ -76,11 +76,11 @@ class EventHubConsumer:
         :return: a string pointing out the partition and the content of the message
         """
 
-        client = self.create_consumer()
+        consumer_client = self.create_consumer()
 
-        async with client:
+        async with consumer_client:
             # Start receiving messages from the beginning of the partition.
-            await client.receive(on_event=on_event, starting_position="-1")
+            await consumer_client.receive(on_event=on_event, starting_position=self.reading_position)
 
         # Close credential when no longer needed.
         await self.credential.close()
