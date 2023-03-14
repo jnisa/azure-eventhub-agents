@@ -1,8 +1,6 @@
 
 
 
-import asyncio
-
 from azure.eventhub.aio import EventHubConsumerClient
 from azure.identity.aio import DefaultAzureCredential
 
@@ -18,10 +16,24 @@ class EventHubConsumer:
     - eventhub_namespace: The name of the Event Hub namespace
 
     On this class you can find the following methods:
-    - consume: This method is used to consume events from the Event Hub instance. 
+    - create_consumer: This method is used to create a consumer client for the Event Hub instance.
+    - get_messages: This method is used to consume events from the Event Hub instance. 
 
     TO BE UPDATED:
     """
+
+    # TODO. raise an exception if the consumer_group is not provided
+    # TODO. raise an exception if the consumer_group is not a string
+    # TODO. raise an exception if the consumer_group is not a valid one
+    # TODO. raise an exception if the eventhub_id is not provided
+    # TODO. raise an exception if the eventhub_id is not a string
+    # TODO. raise an exception if the eventhub_id is not a valid one
+    # TODO. raise an exception if the eventhub_namespace is not provided
+    # TODO. raise an exception if the eventhub_namespace is not a string
+    # TODO. raise an exception if the eventhub_namespace is not a valid one
+    # TODO. raise an exception if the connection_specs is not provided
+    # TODO. raise an exception if the connection_specs is not a string
+    # TODO. raise an exception if the connection_specs is not a valid one
 
     def __init__(self, connection_specs: str, eventhub_id: str, eventhub_namespace: str):
 
@@ -32,7 +44,16 @@ class EventHubConsumer:
         self.credential = DefaultAzureCredential()
 
 
-    def create_consumer(self):
+    # TODO. create a function that checks if the features provided are valid
+    def check_features(self):
+        """
+        This method is used to check if the features provided are valid.
+        """
+
+        pass
+
+
+    def create_consumer(self, consumer_group: str = '$Default'):
         """
         This method is used to create a consumer client for the Event Hub instance.
 
@@ -41,7 +62,7 @@ class EventHubConsumer:
 
         client = EventHubConsumerClient.from_connection_string(
             conn_str = self.connection_features,
-            consumer_group = '$Default',
+            consumer_group = consumer_group,
             eventhub_name = self.eventhub_name
         )
 
@@ -52,7 +73,7 @@ class EventHubConsumer:
         """
         This method is used to consume events from the Event Hub instance.
         
-        :return: a list of messages
+        :return: a string pointing out the partition and the content of the message
         """
 
         client = self.create_consumer()

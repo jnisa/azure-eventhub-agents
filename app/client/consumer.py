@@ -17,10 +17,23 @@ class EventHubConsumer:
 
     On this class you can find the following methods:
     - create_consumer: This method is used to create a consumer client for the Event Hub instance.
-    - get-messages: This method is used to consume events from the Event Hub instance. 
+    - get_messages: This method is used to consume events from the Event Hub instance. 
 
     TO BE UPDATED:
     """
+
+    # TODO. raise an exception if the consumer_group is not provided
+    # TODO. raise an exception if the consumer_group is not a string
+    # TODO. raise an exception if the consumer_group is not a valid one
+    # TODO. raise an exception if the eventhub_id is not provided
+    # TODO. raise an exception if the eventhub_id is not a string
+    # TODO. raise an exception if the eventhub_id is not a valid one
+    # TODO. raise an exception if the eventhub_namespace is not provided
+    # TODO. raise an exception if the eventhub_namespace is not a string
+    # TODO. raise an exception if the eventhub_namespace is not a valid one
+    # TODO. raise an exception if the connection_specs is not provided
+    # TODO. raise an exception if the connection_specs is not a string
+    # TODO. raise an exception if the connection_specs is not a valid one
 
     def __init__(self, connection_specs: str, eventhub_id: str, eventhub_namespace: str):
 
@@ -29,6 +42,15 @@ class EventHubConsumer:
         self.connection_features = connection_specs
 
         self.credential = DefaultAzureCredential()
+
+
+    # TODO. create a function that checks if the features provided are valid
+    def check_features(self):
+        """
+        This method is used to check if the features provided are valid.
+        """
+
+        pass
 
 
     def create_consumer(self, consumer_group: str = '$Default'):
