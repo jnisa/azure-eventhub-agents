@@ -20,14 +20,11 @@ class EventHubManager(ABC):
     namespace provided.
     """
 
-    def __init__(self, subscription_id: str):
-        
-        self.credential = DefaultAzureCredential()
-        self.subscription_id = subscription_id
+    def __init__(self, credential: str, subscription_id: str):
 
         self.management_client = EventHubManagementClient(
-            credential=self.credential, 
-            subscription_id=self.subscription_id
+            credential=credential, 
+            subscription_id=subscription_id
         )
 
 
