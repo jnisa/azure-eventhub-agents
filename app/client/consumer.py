@@ -5,6 +5,7 @@ from azure.eventhub.aio import EventHubConsumerClient
 from azure.identity.aio import DefaultAzureCredential
 
 from app.utils.events import on_event
+from app.utils.azure import ValidationEngine
 
 
 class EventHubConsumer:
@@ -36,23 +37,32 @@ class EventHubConsumer:
     # TODO. raise an exception if the connection_specs is not a string
     # TODO. raise an exception if the connection_specs is not a valid one
 
-    def __init__(self, connection_specs: str, eventhub_id: str, eventhub_namespace: str, starting_position: str = "-1"):
+    def __init__(
+            self, 
+            subscription_id: str,
+            connection_specs: str, 
+            consumer_group: str, 
+            eventhub_instance: str, 
+            eventhub_namespace: str, 
+            starting_position: str = "-1"
+        ):
 
-        self.eventhub_name = eventhub_id
+        self.subscription_id = subscription_id
+        self.connection_specs = connection_specs
+        self.consumer_group = consumer_group
+        self.eventhub_instance = eventhub_instance
         self.eventhub_namespace = eventhub_namespace
-        self.connection_features = connection_specs
-        self.reading_position = starting_position
+        self.starting_position = starting_position
 
         self.credential = DefaultAzureCredential()
 
-
-    # TODO. create a function that checks if the features provided are valid
-    def check_features(self):
-        """
-        This method is used to check if the features provided are valid.
-        """
-
-        pass
+        self.validation_engine = ValidationEngine(
+            subscription_id = self.subscription_id,
+            consumer_group = self.consumer_group,
+            connection_specs = self.connection_features,
+            eventhub_instance = self.eventhub_instance,
+            eventhub_namespace = self.eventhub_namespace
+        )
 
 
     def create_consumer(self, consumer_group: str = '$Default'):
@@ -61,7 +71,6 @@ class EventHubConsumer:
 
         :return: a consumer client for the Event Hub instance
         """
-
         return EventHubConsumerClient.from_connection_string(
             conn_str = self.connection_features,
             consumer_group = consumer_group,
@@ -75,7 +84,6 @@ class EventHubConsumer:
         
         :return: a string pointing out the partition and the content of the message
         """
-
         consumer_client = self.create_consumer()
 
         async with consumer_client:
