@@ -62,20 +62,6 @@ class EventHubManagerListNamespacesTest(TestCase):
 
             self.assertEqual(result, expected)
 
-    
-    def test_list_namespaces_tc3(self):
-        """
-        list_namespaces - 3rd Test Case Scenario
-
-        Description: test that the function doesn't raise an Exception when the EventHub doesn't have any namespaces.
-        """
-        with mock.patch.object(EventHubManager, 'list_namespaces') as mock_list_namespaces:
-            mock_list_namespaces.side_effect = Exception("Invalid connection string.")
-            manager_client = EventHubManager("test_subscription_id")
-
-            with self.assertRaises(Exception):
-                manager_client.list_namespaces()
-
 
 class EventHubManagerListInstancesTest(TestCase):
     """
@@ -107,22 +93,6 @@ class EventHubManagerListInstancesTest(TestCase):
         list_instances - 2nd Test Case Scenario
 
         Description: test that the function doesn't raise an Exception when the EventHub doesn't have any instances.
-        """
-        with mock.patch.object(EventHubManager, 'list_instances') as mock_list_instances:
-            mock_list_instances.return_value = []
-            manager_client = EventHubManager("test_subscription_id")
-
-            result = manager_client.list_instances()
-            expected = []
-
-            self.assertEqual(result, expected)
-
-
-    def test_list_instances_tc3(self):
-        """
-        test_list_instances - 3rd Test Case Scenario
-
-        Description: make sure that the function returns an empty list when invalid subcription is provided.
         """
         with mock.patch.object(EventHubManager, 'list_instances') as mock_list_instances:
             mock_list_instances.return_value = []

@@ -39,7 +39,7 @@ class AzureValidationEngine:
         self.eventhub_manager = EventHubManager(credential, subscription_id)
 
         if not self.call_all_methods():
-            logging.error("The provided information is not correct. Please check the documentation and try again.")
+            logging.error("The provided information is not correct. Please check the resources and try again.")
         else:
             logging.info("The provided information is correct. Let's proceed with the creation of the consumer client.")
 
