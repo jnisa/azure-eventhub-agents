@@ -1,1 +1,0 @@
-CONNECTION_STRING = CONNECTION_SPECS = 'Endpoint=sb://EVENTHUB_NAMESPACE.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=PRIMARY_KEY'
