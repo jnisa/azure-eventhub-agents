@@ -2,7 +2,7 @@
 
 import logging
 
-from app.client.manager import EventHubManager
+from app.client.manager import AzureStockManager
 
 from azure.identity import DefaultAzureCredential, ClientSecretCredential
 from azure.mgmt.eventhub.models import EHNamespace
