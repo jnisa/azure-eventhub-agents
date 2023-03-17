@@ -18,26 +18,31 @@ class AzureStockManagerInitTest(TestCase):
         Description: test the initialization of the AzureStockManager class when the correct parameters
         are provided.
         """
-        result = AzureStockManager("test_credential", "test_subscription_id")
+        result = AzureStockManager(credential="test_credential", subscription_id="test_subscription_id")
 
         self.assertIsInstance(result, AzureStockManager)
-        self.assertEqual("test_credential", result.credential) 
-        self.assertEqual("test_subscription_id", result.subscription_id) 
 
 
-    # TODO. when the subscription_id is not provided
     def test__init__tc2(self):
         """
         __init__ - 2nd Test Case Scenario
 
+        Description: test the initialization of the AzureStockManager class when the credential 
+        is not provided.
+        """
+        with self.assertRaises(TypeError):
+            AzureStockManager(credential="test_credential")
+
+
+    def test__init__tc3(self):
+        """
+        __init__ - 3rd Test Case Scenario
+
         Description: test the initialization of the AzureStockManager class when the subscription_id 
         is not provided.
         """
-        result = AzureStockManager("test_credential")
-
-        self.assertIsInstance(result, AzureStockManager)
-        self.assertEqual("test_credential", result.credential) 
-        self.assertEqual("test_subscription_id", result.subscription_id) 
+        with self.assertRaises(TypeError):
+            AzureStockManager(subscription_id="test_subscription_id")
 
 
 class AzureStockManagerListNamespacesTest(TestCase):
@@ -100,7 +105,7 @@ class AzureStockManagerListInstancesTest(TestCase):
             ]
             manager_client = AzureStockManager("test_credential", "test_subscription_id")
 
-            result = manager_client.list_instances()
+            result = manager_client.list_instances('resource_group', 'eventhub_namespace')
             expected = ['eventhub_instance_1', 'eventhub_instance_2']
 
             self.assertEqual(result, expected)
@@ -116,15 +121,100 @@ class AzureStockManagerListInstancesTest(TestCase):
             mock_list_instances.return_value = []
             manager_client = AzureStockManager("test_credential", "test_subscription_id")
 
-            result = manager_client.list_instances()
+            result = manager_client.list_instances('test_resource_group', 'test_eventhub_namespace')
             expected = []
 
             self.assertEqual(result, expected)
 
     
-    # TODO. when the resource_group is not provided
-    # TODO. when the eventhub_namespace is not provided
+    def test_list_instances_tc3(self):
+        """
+        list_instances - 3rd Test Case Scenario
 
+        Description: test that the function doesn't raise an Exception when the resource_group is not provided.
+        """
+        manager_client = AzureStockManager("test_credential", "test_subscription_id")
+
+        with self.assertRaises(TypeError):
+            manager_client.list_instances(eventhub_namespace='test_eventhub_namespace')
+
+
+    def test_list_instances_tc4(self):
+        """
+        list_instances - 4th Test Case Scenario
+
+        Description: test that the function doesn't raise an Exception when the eventhub_namespace is not provided.
+        """
+        manager_client = AzureStockManager("test_credential", "test_subscription_id")
+
+        with self.assertRaises(TypeError):
+            manager_client.list_instances(resource_group='test_resource_group')
+
+
+class AzureStockManagerListConnectionSpecs(TestCase):
+    """
+    This class is used to test the list_connection_specs method of the AzureStockManager class.
+    """
+
+    def test_list_connection_specs_tc1(self):
+        """
+        list_connection_specs - 1st Test Case Scenario
+
+        Description: test that the function doesn't raise an Exception when a list of valid 
+        connection_specs is obtained.
+        """
+        with mock.patch.object(AzureStockManager, 'list_connection_specs') as mock_list_connection_specs:
+            mock_list_connection_specs.return_value = [
+                "connection_spec_1",
+                "connection_spec_2"
+            ]
+            manager_client = AzureStockManager("test_credential", "test_subscription_id")
+
+            result = manager_client.list_connection_specs('resource_group', 'eventhub_namespace', 'eventhub_instance')
+            expected = ['connection_spec_1', 'connection_spec_2']
+
+            self.assertEqual(result, expected)
+
+    
+    def test_list_connection_specs_tc2(self):
+        """
+        list_connection_specs - 2nd Test Case Scenario
+
+        Description: test that the function doesn't raise an Exception when the EventHub doesn't have any connection_specs.
+        """
+
+        with mock.patch.object(AzureStockManager, 'list_connection_specs') as mock_list_connection_specs:
+            mock_list_connection_specs.return_value = []
+            manager_client = AzureStockManager("test_credential", "test_subscription_id")
+
+            result = manager_client.list_connection_specs('test_resource_group', 'test_eventhub_namespace', 'test_eventhub_instance')
+            expected = []
+
+            self.assertEqual(result, expected)
+
+    
+    def test_list_connection_specs_tc3(self):
+        """
+        list_connection_specs - 3rd Test Case Scenario
+
+        Description: test that the function doesn't raise an Exception when the resource_group is not provided.
+        """
+        manager_client = AzureStockManager("test_credential", "test_subscription_id")
+
+        with self.assertRaises(TypeError):
+            manager_client.list_connection_specs(eventhub_namespace='test_eventhub_namespace', eventhub_instance='test_eventhub_instance')
+
+
+    def test_list_connection_specs_tc4(self):
+        """
+        list_connection_specs - 4th Test Case Scenario
+
+        Description: test that the function doesn't raise an Exception when the eventhub_namespace is not provided.
+        """
+        manager_client = AzureStockManager("test_credential", "test_subscription_id")
+
+        with self.assertRaises(TypeError):
+            manager_client.list_connection_specs(resource_group='test_resource_group', eventhub_instance='test_eventhub_instance')
 
 
 class AzureStockManagerListConsumerGroupsTest(TestCase):
@@ -162,7 +252,7 @@ class AzureStockManagerListConsumerGroupsTest(TestCase):
             mock_list_consumer_groups.return_value = []
             manager_client = AzureStockManager("test_credential", "test_subscription_id")
 
-            result = manager_client.list_consumer_groups()
+            result = manager_client.list_consumer_groups('test_resource_group', 'test_eventhub_namespace')
             expected = []
 
             self.assertEqual(result, expected)
@@ -172,13 +262,21 @@ class AzureStockManagerListConsumerGroupsTest(TestCase):
         """
         test_list_consumer_groups - 3rd Test Case Scenario
 
-        Description: make sure that the function returns an empty list when invalid subcription is provided.
+        Description: test that the function doesn't raise an Exception when the resource_group is not provided.
         """
-        with mock.patch.object(AzureStockManager, 'list_consumer_groups') as mock_list_consumer_groups:
-            mock_list_consumer_groups.return_value = []
-            manager_client = AzureStockManager("test_credential", "test_subscription_id")
+        manager_client = AzureStockManager("test_credential", "test_subscription_id")
 
-            result = manager_client.list_consumer_groups()
-            expected = []
+        with self.assertRaises(TypeError):
+            manager_client.list_consumer_groups(eventhub_namespace='test_eventhub_namespace')
 
-            self.assertEqual(result, expected)
+
+    def test_list_consumer_groups_tc4(self):
+        """
+        list_consumer_groups - 4th Test Case Scenario
+
+        Description: test that the function doesn't raise an Exception when the eventhub_namespace is not provided.
+        """
+        manager_client = AzureStockManager("test_credential", "test_subscription_id")
+
+        with self.assertRaises(TypeError):
+            manager_client.list_consumer_groups(resource_group='test_resource_group')

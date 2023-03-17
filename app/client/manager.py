@@ -23,7 +23,6 @@ class AzureStockManager(ABC):
     - list_connection_specs: list all the connection specs within the Event Hub namespace provided.
     """
 
-    # TODO. self.eventhub_namespace needs to be added to the __init__ method.
     def __init__(self, credential: str, subscription_id: str):
 
         self.eventhub_mgmt_client = EventHubManagementClient(
@@ -75,6 +74,6 @@ class AzureStockManager(ABC):
         :return: list of consumer groups
         """
         return [
-            resource_group.name 
-            for resource_group in self.eventhub_mgmt_client.consumer_groups.list_by_event_hub(resource_group, eventhub_namespace)
+            consumer_group.name 
+            for consumer_group in self.eventhub_mgmt_client.consumer_groups.list_by_event_hub(resource_group, eventhub_namespace)
         ]

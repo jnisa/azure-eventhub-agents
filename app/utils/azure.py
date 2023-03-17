@@ -36,7 +36,7 @@ class AzureValidationEngine:
         self.eventhub_instance = eventhub_instance
         self.eventhub_namespace = eventhub_namespace
 
-        self.eventhub_manager = EventHubManager(credential, subscription_id)
+        self.eventhub_manager = AzureStockManager(credential, subscription_id)
 
         if not self.call_all_methods():
             logging.error("The provided information is not correct. Please check the resources and try again.")
@@ -47,6 +47,8 @@ class AzureValidationEngine:
     def validate_eventhub_namespace(self) -> bool:
         """
         Validate the eventhub_namespace provided by the user.
+
+        :return boolean value indicating if the eventhub_namespace is correct or not
         """
         return self.eventhub_namespace in self.eventhub_manager.list_namespaces()
     
@@ -54,6 +56,8 @@ class AzureValidationEngine:
     def validate_eventhub_instance(self) -> bool:
         """
         Validate the eventhub_instance provided by the user.
+
+        :return boolean value indicating if the eventhub_instance is correct or not
         """
         return self.eventhub_id in self.eventhub_manager.list_instances()
 
@@ -61,6 +65,8 @@ class AzureValidationEngine:
     def validate_consumer_group(self) -> bool:
         """
         Validate the consumer_group provided by the user.
+
+        :return: boolean value indicating if the consumer_group is correct or not
         """
         return self.consumer_group in self.eventhub_manager.list_consumer_groups()
 
@@ -68,14 +74,17 @@ class AzureValidationEngine:
     def validate_connection_specs(self) -> bool:
         """
         Validate the connection_specs provided by the user.
+
+        :return: boolean value indicating if the connection_specs are correct or not
         """
         return self.connection_specs in self.eventhub_manager.list_keys()
 
 
-    def call_all_methods(self) -> None:
+    def call_all_methods(self):
         """
         This method is used to call all the methods in this class.
         """
         self.validate_eventhub_namespace()
         self.validate_eventhub_instance()
         self.validate_consumer_group()
+        self.validate_connection_specs()

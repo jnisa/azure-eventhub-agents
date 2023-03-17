@@ -1,6 +1,6 @@
 
 
-async def one_event(partition_context, event):
+async def on_event(partition_context, event):
     """
     This method can be seen as the action performed on each and every message obtained 
     from EventHub. 
