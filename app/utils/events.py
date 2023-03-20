@@ -1,6 +1,8 @@
 
 
-async def on_event(partition_context, event):
+import sys
+
+async def on_event(partition_context, event, output=sys.stdout):
     """
     This method can be seen as the action performed on each and every message obtained 
     from EventHub. 

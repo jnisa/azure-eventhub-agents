@@ -7,3 +7,7 @@ Azure Eventhub Consumer and Producer
 coverage run -m unittest discover
 coverage report -m 
 ````
+
+### 2. Novices on this repo
+
+1. Test asynchronous functions;
