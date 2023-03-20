@@ -145,9 +145,6 @@ class AzureValidationEngineValidateEventHubInstanceTest(TestCase):
     Test the validate_eventhub_instance method of the AzureValidationEngine class.
     """
 
-    # TODO. 
-    # Test: the response of the validation function if there's no eventhub instances
-
     @patch("app.utils.azure.AzureStockManager")
     def test_validate_eventhub_instance_tc1(self, mock_azure_stock_manager):
         """
@@ -211,9 +208,6 @@ class AzureValidationEngineValidateConsumerGroupTest(TestCase):
     Test the validate_consumer_group method of the AzureValidationEngine class.
     """
 
-    # TODO. 
-    # Test: the response of the validation function if there's no consumer_groups
-
     @patch("app.utils.azure.AzureStockManager")
     def test_validate_consumer_group_tc1(self, mock_azure_stock_manager):
         """
@@ -276,9 +270,6 @@ class AzureValidationEngineValidateConnectionSpecsTest(TestCase):
     """
     Test the validate_connection_specs method of the AzureValidationEngine class.
     """
-
-    # TODO. 
-    # Test: the response of the validation function if there's not eventhub instances
 
     @patch("app.utils.azure.AzureStockManager")
     def test_validate_connection_specs_tc1(self, mock_azure_stock_manager):

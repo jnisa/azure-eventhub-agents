@@ -27,6 +27,8 @@ class AzureValidationEngine:
     :param credential: authentication credentials to access the Azure account
     """
 
+    # TODO. setup a logger to this class
+
     def __init__(
             self, subscription_id: str, consumer_group: str, connection_specs: str, eventhub_instance: str, 
             eventhub_namespace: str, credential: str = DefaultAzureCredential()
