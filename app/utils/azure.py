@@ -20,10 +20,11 @@ class AzureValidationEngine:
 
     To make this class work you need to provide the following information:
     :param subscritpion_id: subscription id to the Azure account
+    :param consumer_group: consumer group to the Event Hub instance
     :param connection_specs: connection string to the Event Hub instance
     :param eventhub_instance: name of the Event Hub instance
     :param eventhub_namespace: name of the Event Hub namespace
-    :param credential: authtentication credentials to access the Azure account
+    :param credential: authentication credentials to access the Azure account
     """
 
     def __init__(
@@ -59,7 +60,7 @@ class AzureValidationEngine:
 
         :return boolean value indicating if the eventhub_instance is correct or not
         """
-        return self.eventhub_id in self.eventhub_manager.list_instances()
+        return self.eventhub_instance in self.eventhub_manager.list_instances()
 
 
     def validate_consumer_group(self) -> bool:
