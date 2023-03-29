@@ -3,18 +3,21 @@
 from app.utils.events import on_event
 
 import asyncio
+import unittest
+import logging
 from io import StringIO
-from unittest.mock import MagicMock
-from unittest import TestCase, IsolatedAsyncioTestCase
+from unittest.mock import MagicMock, patch
 
 
-class OnEventTest(TestCase):
+
+class OnEventTest(unittest.TestCase):
     """
     Test the on_event decorator that is used to keep track on the messages received and their
     respective location (i.e. EventHub partition).
     """
 
-    async def test_on_event_tc1(self):
+    @patch("app.utils.events.EVENT_LOGGER")
+    async def test_on_event_tc1(self, mock_logger):
         """
         on_event - 1st Test Case Scenario
 
@@ -28,11 +31,11 @@ class OnEventTest(TestCase):
         event.body_as_str.return_value = "test-messsage-1"
         partition_context.partition_id = "partition-1"
 
-        output = StringIO()
-        await on_event(partition_context, event, output=output)
+        await on_event(partition_context, event)
 
-        expected = 'Received the event: "test-messsage-1" from the partition with ID: "partition-1"'
-        self.assertEqual(output.getvalue(), expected)
+        expected = 'Received the event: "test-messsage-1" from the partition with ID: "partition-"'
+        mock_logger.assert_called_with(expected)
+        mock_logger.assert_called_once()
 
         
     async def test_on_event_tc2(self):
@@ -67,7 +70,7 @@ class OnEventTest(TestCase):
         event.body_as_str.side_effect = UnicodeDecodeError("utf-8", b"test", 0, 1, "test")
 
         with self.assertRaises(UnicodeDecodeError):
-                    await on_event(partition_context, event)        
+            await on_event(partition_context, event)        
 
 
     async def test_on_event_tc4(self):
@@ -85,3 +88,6 @@ class OnEventTest(TestCase):
 
         with self.assertRaises(Exception):
             await on_event(partition_context, event)
+
+    if __name__ == '__main__':
+        asyncio.run(unittest.main())

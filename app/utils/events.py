@@ -1,8 +1,14 @@
 
 
 import sys
+import logging
 
-async def on_event(partition_context, event, output=sys.stdout):
+
+__name__ = "enventhub_client.events"
+EVENT_LOGGER = logging.getLogger(__name__)
+
+
+async def on_event(partition_context, event):
     """
     This method can be seen as the action performed on each and every message obtained 
     from EventHub. 
@@ -15,7 +21,7 @@ async def on_event(partition_context, event, output=sys.stdout):
     """
 
     # Define the output
-    print(
+    EVENT_LOGGER.info(
         'Received the event: "{}" from the partition with ID: "{}"'.format(
             event.body_as_str(encoding="UTF-8"), partition_context.partition_id
         )
